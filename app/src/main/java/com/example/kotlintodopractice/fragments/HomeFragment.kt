@@ -134,7 +134,8 @@ class HomeFragment : Fragment(), EmployeeDialogFragment.OnDialogNextBtnClickList
                                 employeeAdapter.notifyItemRemoved(position)
                                 Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show()
                             } else {
-//                                Toast.makeText(context, "Error: Invalid position", Toast.LENGTH_SHORT).show()
+                                // Handle Error: Invalid position
+                                Toast.makeText(context, "Error: Invalid position", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
@@ -149,6 +150,7 @@ class HomeFragment : Fragment(), EmployeeDialogFragment.OnDialogNextBtnClickList
                 .show()
         }
     }
+
 
     override fun onEditItemClicked(employeeData: EmployeeData, position: Int) {
         if (frag != null)
