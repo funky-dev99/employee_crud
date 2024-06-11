@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlintodopractice.databinding.FragmentHomeBinding
@@ -121,18 +122,31 @@ class HomeFragment : Fragment(), EmployeeDialogFragment.OnDialogNextBtnClickList
     }
 
     override fun onDeleteItemClicked(employeeData: EmployeeData, position: Int) {
-        database.child(employeeData.employeeId).removeValue().addOnCompleteListener {
-            if (it.isSuccessful) {
-                if (position < employeeItemList.size) {
-                    employeeItemList.removeAt(position)
-                    employeeAdapter.notifyItemRemoved(position)
-                    Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "Error: Invalid position", Toast.LENGTH_SHORT).show()
+        context?.let { context ->
+            AlertDialog.Builder(context)
+                .setTitle("Delete Employee")
+                .setMessage("Are you sure you want to delete this employee?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    database.child(employeeData.employeeId).removeValue().addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            if (position < employeeItemList.size) {
+                                employeeItemList.removeAt(position)
+                                employeeAdapter.notifyItemRemoved(position)
+                                Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "Error: Invalid position", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    dialog.dismiss()
                 }
-            } else {
-                Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
-            }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
         }
     }
 
