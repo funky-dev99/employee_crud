@@ -58,7 +58,45 @@ class EmployeeDialogFragment : BottomSheetDialogFragment() {
                 val lName = lastNameInput.text.toString().trim()
                 val desig = designationInput.text.toString().trim()
 
-                if (fName.isNotEmpty() && lName.isNotEmpty() && desig.isNotEmpty()) {
+                var isError = false
+
+                if (fName.isEmpty()) {
+                    firstNameInput.error = "First name required"
+                    isError = true
+                } else {
+                    firstNameInput.error = null
+                }
+
+                if (lName.isEmpty()) {
+                    lastNameInput.error = "Last name required"
+                    isError = true
+                } else {
+                    lastNameInput.error = null
+                }
+
+                if (desig.isEmpty()) {
+                    designationInput.error = "Designation required"
+                    isError = true
+                } else {
+                    designationInput.error = null
+                }
+
+                if (containsNumbers(fName)) {
+                    firstNameInput.error = "First name cannot contain numbers"
+                    isError = true
+                }
+
+                if (containsNumbers(lName)) {
+                    lastNameInput.error = "Last name cannot contain numbers"
+                    isError = true
+                }
+
+                if (containsNumbers(desig)) {
+                    designationInput.error = "Designation cannot contain numbers"
+                    isError = true
+                }
+
+                if (!isError) {
                     if (employeeId == null) {
                         val employee = EmployeeData("", fName, lName, desig)
                         listener?.saveEmployee(employee, firstNameInput)
@@ -66,10 +104,6 @@ class EmployeeDialogFragment : BottomSheetDialogFragment() {
                         val employee = EmployeeData(employeeId!!, fName, lName, desig)
                         listener?.updateEmployee(employee, firstNameInput)
                     }
-                } else {
-                    if (fName.isEmpty()) firstNameInput.error = "First name required"
-                    if (lName.isEmpty()) lastNameInput.error = "Last name required"
-                    if (desig.isEmpty()) designationInput.error = "Designation required"
                 }
             }
 
@@ -78,6 +112,11 @@ class EmployeeDialogFragment : BottomSheetDialogFragment() {
             }
         }
     }
+
+    private fun containsNumbers(text: String): Boolean {
+        return text.any { it.isDigit() }
+    }
+
 
     interface OnDialogNextBtnClickListener {
         fun saveEmployee(employee: EmployeeData, todoEdit: TextInputEditText)

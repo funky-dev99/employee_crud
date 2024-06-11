@@ -134,7 +134,7 @@ class HomeFragment : Fragment(), EmployeeDialogFragment.OnDialogNextBtnClickList
                                 employeeAdapter.notifyItemRemoved(position)
                                 Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show()
                             } else {
-                                Toast.makeText(context, "Error: Invalid position", Toast.LENGTH_SHORT).show()
+//                                Toast.makeText(context, "Error: Invalid position", Toast.LENGTH_SHORT).show()
                             }
                         } else {
                             Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
